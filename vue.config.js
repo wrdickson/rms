@@ -8,7 +8,7 @@ module.exports = {
     proxy: 'http://127.0.0.1:80'
   },
   // app won't run on Edge without this
-  transpileDependencies: ['vuetify']
+  transpileDependencies: ['vuetify'],
 
   // DO NOT USE baseUrl UNTIL YOU ARE BUILDING!!
 
@@ -25,6 +25,7 @@ module.exports = {
   // ??use this when building to serve from localhost with apache
 
   // build says "baseUrl is deprecated, use 'publicPath' instead
-  // baseUrl: '/vue-v/dist/'
+  publicPath: '/rms/dist/'
+  
 
 }

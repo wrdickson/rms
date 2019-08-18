@@ -1,5 +1,5 @@
 <template>
-  <v-layout row wrap paymentWrapper>
+  <div>
 
     <!-- snackbar -->
     <div class="text-center">
@@ -23,36 +23,39 @@
 
 
 
-    <v-flex xs12>
-      <h1>Payment</h1>
-    </v-flex>
-    <v-flex xs12>
-      <table class="paymentTable">
-        <tr>
-          <th>Date</th>
-          <th>Type</th>
-          <th>Amount</th>
-          <th>By</th>
-        </tr>
-        <tr
-          v-for="payment in reservation.folio_obj.payments"
-          v-bind:key="payment.id"
-        >
-          <td>{{payment.date_posted}}</td>
-          <td>{{payment.payment_title}}</td>
-          <td>{{payment.amount}}</td>
-          <td>{{payment.posted_by_username}}</td>
-        
-        </tr>
-            <tr>
-              <td>TOTAL PAYMENTS ==></td>
-              <td></td>
-              <td>{{ paymentTotal }}</td>
-              <td></td>           
-            </tr>        
-      </table>
-
-    </v-flex>
+    <v-row no-gutters>
+      <v-col rows="12" xs="12">
+        <h2>Payment</h2>
+      </v-col>
+    </v-row>
+    <v-row no-gutters>
+      <v-col cols="12" xs="12">
+        <table class="paymentTable">
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>By</th>
+          </tr>
+          <tr
+            v-for="payment in reservation.folio_obj.payments"
+            v-bind:key="payment.id"
+          >
+            <td>{{payment.date_posted}}</td>
+            <td>{{payment.payment_title}}</td>
+            <td>{{payment.amount}}</td>
+            <td>{{payment.posted_by_username}}</td>
+          
+          </tr>
+              <tr>
+                <td>TOTAL PAYMENTS ==></td>
+                <td></td>
+                <td>{{ paymentTotal }}</td>
+                <td></td>           
+              </tr>        
+        </table>
+      </v-col>
+    </v-row>
     <v-flex xs12>
       <v-btn color="info" @click="paymentDialog = true">
         Post Payment
@@ -67,8 +70,8 @@
           <v-btn 
             color="blue lighten-1"
             @click="paymentDialog = false"
-            icon>
-            <v-icon>navigate_before</v-icon>
+          >  
+            <v-icon>mdi-arrow-left</v-icon>
           </v-btn>
         </v-toolbar>
         <v-card-title>
@@ -103,7 +106,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-layout>
+  </div>
 
 </template>
 

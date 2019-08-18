@@ -25,6 +25,11 @@ export default new Router({
       component: () => import (/* webpackChunkName: "admin-panel" */ './views/AdminPanel.vue')
     },
     {
+      path: '/calendarView/',
+      name: 'calendarView',
+      component: () => import(/* webpackChunkName: "calendar-view" */ './views/CalendarView.vue')
+    },
+    {
       path: '/createReservation/',
       name: 'createReservation',
       component: () => import(/* webpackChunkName: "create-reservation" */ './views/CreateReservation.vue')

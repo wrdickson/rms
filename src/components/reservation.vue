@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-form class="compactForm">
-      <v-layout row wrap >
-        <v-flex xs6 sm4 md3>
+      <v-row >
+        <v-col cols="12" xs="6" sm="4" md="3">
           <!-- Checkin datepicker -->
           <v-menu
             ref="ciMenu"
@@ -30,10 +30,10 @@
               @input="ciInput"
             />
           </v-menu>
-        </v-flex>
+        </v-col>
         
         <!-- Checkout datepicker -->
-        <v-flex xs6 sm4 md3>
+        <v-col cols="12" xs="6" sm="4" md="3">
           <v-menu
             ref="coMenu"
             v-model="checkoutMenu"
@@ -60,10 +60,10 @@
               @input="coInput"
               />
           </v-menu>
-        </v-flex>
+        </v-col>
         
         <!-- Space picker dialog -->
-        <v-flex xs6 sm4 md3>
+        <v-col rows="12" xs="6" sm="4" md="3">
           <v-text-field
             label="Space"
             required
@@ -100,10 +100,10 @@
               </v-card-actions>
             </v-card>
           </v-dialog>        
-        </v-flex>
+        </v-col>
         
         <!-- People select -->  
-        <v-flex xs3 sm3 md1>
+        <v-col cols="12" xs="3" sm="3" md="1">
           <v-select
             :items="peopleOptions"
             v-model="peopleSelect"
@@ -111,10 +111,10 @@
             item-text="text"
             item-value="value"
           ></v-select>        
-        </v-flex> 
+        </v-col> 
 
         <!-- Beds select -->  
-        <v-flex xs3 sm3 md1>
+        <v-col cols="12" xs="3" sm="3" md="1">
           <v-select
             :items="bedOptions"
             v-model="bedsSelect"
@@ -122,9 +122,9 @@
             item-text="text"
             item-value="value"
           ></v-select>        
-        </v-flex>     
+        </v-col>     
    
-      </v-layout>
+      </v-row>
     </v-form>
 
   </div>

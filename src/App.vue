@@ -85,7 +85,18 @@
               <v-list-item-title>ResTable</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+
+          <v-list-item to="/calendarView">
+            <v-list-item-action>
+              <v-icon>mdi-table-large</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>CalendarView</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
         </div>
+
+        
 
         <!-- from here down, only visible to logged userw permission > 7 --> 
         <div v-if="user.permission > 7">

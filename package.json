@@ -12,6 +12,7 @@
     "core-js": "^2.6.5",
     "moment": "^2.24.0",
     "moment-range": "^4.0.2",
+    "pdfmake": "^0.1.58",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "vuetify": "^2.0.0",

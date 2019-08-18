@@ -1,5 +1,6 @@
 <template>
-  <div class="folioWrapper">
+  <div>
+    
     <Payment
       v-if="reservation.id > 0"
       :reservation="reservation"
@@ -9,34 +10,38 @@
       :paymentTotal="paymentTotal"
 
     ></Payment>
-    <h2>Folio</h2>
-        <h3>Charges: </h3>
-        <table class="salesTable">
-            <tr>
-              <th>Date</th> 
-              <th>Item</th>
-              <th>Amount</th>
-              <th>Tax</th>
-              <th>Total</th>
-              <th>By</th>
-            </tr>
-            <tr v-for="sale in reservation.folio_obj.sales" v-bind:key="sale.id">
-              <td>{{ sale.sale_date }}</td>
-              <td>{{ sale.sales_item_title }}</td>
-              <td>{{ sale.net }}</td>
-              <td>{{ sale.tax }}</td>
-              <td>{{ sale.total }}</td>
-              <td>{{ sale.username }}</td>
-            </tr>
-            <tr>
-              <td>TOTAL CHARGES ==></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>{{ salesTotal }}</td>
-              <td></td>           
-            </tr>
-        </table>
+    
+    <v-row no-gutters>
+      <v-col cols="12" xs="12">
+        <h2>Charges: </h2>
+      </v-col>
+    </v-row>
+    <table class="salesTable">
+        <tr>
+          <th>Date</th> 
+          <th>Item</th>
+          <th>Amount</th>
+          <th>Tax</th>
+          <th>Total</th>
+          <th>By</th>
+        </tr>
+        <tr v-for="sale in reservation.folio_obj.sales" v-bind:key="sale.id">
+          <td>{{ sale.sale_date }}</td>
+          <td>{{ sale.sales_item_title }}</td>
+          <td>{{ sale.net }}</td>
+          <td>{{ sale.tax }}</td>
+          <td>{{ sale.total }}</td>
+          <td>{{ sale.username }}</td>
+        </tr>
+        <tr>
+          <td>TOTAL CHARGES ==></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>{{ salesTotal }}</td>
+          <td></td>           
+        </tr>
+    </table>
         <v-layout v-if="folioIsOpen" row wrap class="postSale">
           <v-flex xs12 sm12 md12 lg12 xl12>
             <h3>Post Charge:</h3>
@@ -260,12 +265,6 @@
 </script>
 
 <style>
-.folioWrapper{
-  border: 2px solid green;
-  border-radius: 5px;
-  padding: 4px;
-  margin-bottom: 5px;
-}
 .tButton{
   margin-left: 1px;
   margin-right: 1px;

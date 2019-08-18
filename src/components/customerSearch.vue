@@ -25,67 +25,16 @@
     
     <v-dialog
       v-model="showCustomerSelect"
-    
     >
       <div class="customerSelectWrapper">
         <v-data-table
           :items="searchCustomerList"
+          items-per-page="10"
           class="customerSelect"
           :headers="customerSelectHeaders"
+          @click:row="clickCustomerSelect"
+          dense
         >
-          <template v-slot:items="props">
-            
-              <td
-                @click="clickCustomerSelect"
-                :customerId="props.item.id"
-                class="text-xs-left lastName"
-              >
-                {{ props.item.lastName }}
-              </td>
-              <td
-                @click="clickCustomerSelect"              
-                :customerId="props.item.id"
-                class="text-xs-left firstName"
-              >
-                {{ props.item.firstName }}
-              </td>
-              <td
-                @click="clickCustomerSelect"              
-                :customerId="props.item.id"
-                class="text-xs-left address1"
-              >
-                {{ props.item.address1 }}
-              </td>
-              <td
-                 @click="clickCustomerSelect"             
-                :customerId="props.item.id"
-                class="text-xs-left address1"
-              >
-                {{ props.item.address2 }}
-              </td>
-              <td 
-                @click="clickCustomerSelect"              
-                :customerId="props.item.id"
-                class="text-xs-left city"
-              >
-                {{ props.item.city }}
-              </td>
-              <td
-                @click="clickCustomerSelect"             
-                :customerId="props.item.id"
-                class="text-xs-left phone"
-              >
-                {{ props.item.phone }}
-              </td>
-              <td 
-                @click="clickCustomerSelect"              
-                :customerId="props.item.id"
-                class="text-xs-left email"
-              >
-                {{ props.item.email }}
-              </td>
-            
-          </template>
         </v-data-table>
       </div>
     </v-dialog>
@@ -127,8 +76,8 @@ export default {
   },
   methods: {
     clickCustomerSelect: function(e){
-      console.log( 'click',e.target.getAttribute('customerId') );
-      let c = this.searchCustomerList.filter(item => item.id == e.target.getAttribute('customerId') );
+      console.log( 'click',e.id );
+      let c = this.searchCustomerList.filter(item => item.id == e.id );
       console.log("c",c[0]);
       this.workingCustomer = c[0];
       this.showCustomerSelect = false;

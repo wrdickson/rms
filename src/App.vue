@@ -6,7 +6,7 @@
     <v-navigation-drawer
       v-model="drawer"
       mobile-break-point="600"
-      fixed
+      clipped
       app
       width="200"
     >
@@ -118,7 +118,7 @@
         UserIsLoggedIn: {{ userIsLoggedIn }}
       </div>
     </v-navigation-drawer>
-    <v-app-bar color="indigo" dark fixed dense app>
+    <v-app-bar color="indigo" dense app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" ></v-app-bar-nav-icon>
       <v-toolbar-title>Lazy Lizard Reservations</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -219,7 +219,7 @@
         this.$router.push('/home');
       },
       reopenShift: function(){
-        this.$router.push( { name: 'reopen-shift', params: { userId: this.user.userId } } );
+        this.$router.push( { name: 'reopen-shift', params: { userId: parseInt(this.user.userId) } } );
         /*
         api.reopenShiftOptions( this.user ).then( function( response ) {
           console.log("reopen response", response )

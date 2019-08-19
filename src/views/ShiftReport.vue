@@ -1,91 +1,142 @@
 <template>
-  <div v-if="loaded">
-    <v-row>
-      <v-col cols="12" xs="12">
-        <v-btn color="info" @click="generatePdf">Pdf</v-btn>
-      </v-col>
-    </v-row>
-    <v-layout>
-      <v-flex xs12>
-          <h2 class="text-xs-center">Shift Report</h2>
-       </v-flex>
-      
-    </v-layout>
-    <v-layout row wrap>
-      <v-flex xs12>
-        <p>User: {{ this.user.username }}</p>
-      </v-flex>
-      <v-flex xs12>
-        <p>Report Generated: {{ generatedTime }}</p>
-      </v-flex>
-      <v-flex xs12>
-        <p>Shift Id: {{ shift.id }}</p>
-      </v-flex>
-    </v-layout>
-    <v-layout row wrap>
-      <v-flex xs12>
-        <h2>All Payments</h2>
-      </v-flex>
-      <v-flex xs12>
-        <table class="reportTable">
-          <tr>
-            <th>Date</th>
-            <th>Type</th>
-            <th>Amount</th>
-            <th>By</th>
-          </tr>
-          <tr
-            v-for="payment in payments"
-            v-bind:key="payment.id"
-          >
-            <td>{{payment.date_posted}}</td>
-            <td>{{payment.payment_title}}</td>
-            <td>{{payment.amount}}</td>
-            <td>{{payment.posted_by_username}}</td>
-          
-          </tr>
-          <tr>
-            <td>TOTAL PAYMENTS ==></td>
-            <td></td>
-            <td>{{ paymentTotal }}</td>
-            <td></td>           
-          </tr>        
-        </table>
-
-      </v-flex>
-    </v-layout>
-    <v-layout row  wrap v-for="paymentType in paymentTypes" v-bind:key="paymentType.id">
-      <v-flex xs12 >
-        <h2>Payment Type: {{paymentType.payment_title}}</h2>
-      </v-flex>
-      <v-flex xs12>
-        <table class="reportTable">
-          <tr>
-            <th>Date</th>
-            <th>Type</th>
-            <th>Amount</th>
-            <th>By</th>
-          </tr>
-          <tr
-            v-for="payment in paymentsByPaymentType[ paymentType.id ]"
-            v-bind:key="payment.id"
-          >
-            <td>{{payment.date_posted}}</td>
-            <td>{{payment.payment_title}}</td>
-            <td>{{payment.amount}}</td>
-            <td>{{payment.posted_by_username}}</td>
-          
-          </tr>
-     
-        </table>       
-
-      </v-flex>
-    </v-layout>
-
-    
-  </div>
-
-
+  <v-container>
+    <v-slide-x-transition>
+    </v-slide-x-transition>
+    <div v-if="loaded">
+      <v-row>
+        <v-col cols="12" xs="12">
+          <v-btn color="info" @click="generatePdf">Pdf</v-btn>
+        </v-col>
+      </v-row>
+      <v-layout>
+        <v-flex xs12>
+            <h2 class="text-xs-center">Shift Report</h2>
+        </v-flex>
+      </v-layout>
+      <v-layout row wrap>
+        <v-flex xs12>
+          <p>User: {{ this.user.username }}</p>
+        </v-flex>
+        <v-flex xs12>
+          <p>Report Generated: {{ generatedTime }}</p>
+        </v-flex>
+        <v-flex xs12>
+          <p>Shift Id: {{ shift.id }}</p>
+        </v-flex>
+      </v-layout>
+      <v-layout row wrap>
+        <v-flex xs12>
+          <h2>All Payments</h2>
+        </v-flex>
+        <v-flex xs12>
+          <table class="reportTable">
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>By</th>
+              <th>Folio</th>
+              <th>Reservation</th>
+            </tr>
+            <tr
+              v-for="payment in payments"
+              v-bind:key="payment.id"
+            >
+              <td>{{payment.date_posted}}</td>
+              <td>{{payment.payment_title}}</td>
+              <td>{{payment.amount}}</td>
+              <td>{{payment.posted_by_username}}</td>
+              <td style="margin: 0px !important; padding: 0px !important;">
+                <v-btn 
+                  color="green darken-4"
+                  tile 
+                  width="100%"
+                >
+                  {{payment.folio}}
+                </v-btn>
+              </td>
+              <td style="margin: 0px !important; padding: 0px !important;">
+                <v-btn 
+                  color="blue darken-4"
+                  tile 
+                  width="100%"
+                >
+                  {{payment.reservation}}
+                </v-btn>              
+              </td>
+            </tr>
+            <tr>
+              <td>TOTAL PAYMENTS ==></td>
+              <td></td>
+              <td>{{ paymentTotal }}</td>
+              <td></td>           
+            </tr>        
+          </table>
+        </v-flex>
+      </v-layout>
+      <v-layout row  wrap v-for="paymentType in paymentTypes" v-bind:key="paymentType.id">
+        <v-flex xs12 >
+          <h2>Payment Type: {{paymentType.payment_title}}</h2>
+        </v-flex>
+        <v-flex xs12>
+          <div class="tableWrapper">
+            <table class="reportTable">
+              <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Folio</th>
+                <th>Reservation</th>
+                <th>Customer</th>
+              </tr>
+              <!-- rows fore each payment -->
+              <tr
+                v-for="payment in paymentsByPaymentType[ paymentType.id ]"
+                v-bind:key="payment.id"
+              >
+                <td>{{payment.date_posted}}</td>
+                <td>{{payment.payment_title}}</td>
+                <td>{{payment.amount}}</td>
+                <td style="margin: 0px !important; padding: 0px !important;">
+                  <v-btn 
+                    color="green darken-4"
+                    tile 
+                    width="100%"
+                  >
+                    {{payment.folio}}<v-icon right>mdi-open-in-new</v-icon>
+                  </v-btn>
+                </td>
+                <td style="margin: 0px !important; padding: 0px !important;">
+                  <v-btn 
+                    color="blue darken-4"
+                    tile 
+                    width="100%"
+                  >
+                    {{payment.reservation}}<v-icon right>mdi-open-in-new</v-icon>
+                  </v-btn>              
+                </td>
+                <td style="margin: 0px !important; padding: 0px !important;">
+                  <v-btn 
+                    color="orange darken-4"
+                    tile 
+                    width="100%"
+                  >
+                    {{payment.last_name}}, {{payment.first_name}}<v-icon right>mdi-open-in-new</v-icon>
+                  </v-btn>              
+                </td>         
+              </tr>
+              <!-- totals row -->
+              <tr>
+                <td colspan='2'>Total ====></td>
+                <td>{{ paymentTypeTotals[ paymentType.id ] }}</td>
+                <td>pti: {{ paymentType.id }}</td>
+              </tr>
+            </table>       
+          </div>
+        </v-flex>
+      </v-layout>
+    </div>
+  </v-container>
 </template>
 
 <script>
@@ -99,17 +150,6 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs
 
 export default{
   computed: {
-    paymentTotal: {
-      get: function(){
-        let paymentTotal = 0;
-
-        _.forEach(this.payments, function( payment ){
-          paymentTotal = paymentTotal + parseFloat(payment.amount);
-        })
-        return paymentTotal;
-        
-      }
-    },
     paymentsByPaymentType: {
       get: function(){
         let typedPayments = {};
@@ -124,7 +164,7 @@ export default{
         });
         return typedPayments
       }
-    }
+    },
   },
   created: function(){
     if(this.shiftId > 0){
@@ -133,6 +173,8 @@ export default{
         self.shift = response.data.shift
         self.sales = response.data.sales
         self.payments = response.data.payments
+        self.paymentTotal = response.data.payment_total
+        self.paymentTypeTotals = response.data.payments_by_type
         //  nasty . . . nested async
         let that = self;
         api.getPaymentTypes().then( function( response ){
@@ -146,6 +188,8 @@ export default{
     return {
       loaded: false,
       payments: [],
+      paymentTypeTotals: {},
+      paymentTotal: 0,
       paymentTypes: [],
       generatedTime: moment().format("MMMM D, YYYY, h:mm:ss a"),
       sales: [],
@@ -158,13 +202,11 @@ export default{
       //generate the basic document definition
       let docDefinition = {
         header: {
-          text: 'This is a header',
-          style: ['header', 'center', 'f22']
+          text: 'Shift Report',
+          style: ['f15']
         },
         footer: 'Footer here!',
-        content: [
-          
-        ],
+        content: [],
         styles: {
           bold: {
             bold: true
@@ -177,7 +219,13 @@ export default{
           },
           center: {
             alignment: 'center'
+          },
+          table: {
+            margin: [0, 5, 0, 15]
           }
+        },
+        defaultStyle: {
+          fontSize: 8
         }
       }
       //iterate through the payment types
@@ -194,13 +242,12 @@ export default{
 
         //create the table
         obj = {
-          layout: 'lightHorizontalLines',
+          style: ['table'],
           table: {
             // headers are automatically repeated if the table spans over multiple pages
             // you can declare how many rows should be treated as headers
             headerRows: 1,
-            widths: [ 100, 100, 100, 100 ],
-
+            widths: [ 150, 125, 100, 70 ],
             body: [
               [ 'Date', 'Type', 'Amount', 'Folio' ],
             ]
@@ -238,13 +285,47 @@ export default{
 <style>
 .reportTable{
   border-collapse: collapse;
-  width: 100%
+  width: 100%;
+  font-family: Tahoma, Geneva, sans-serif;
+  font-size: 14px;
 }
 .reportTable th{
   border: 1px solid rgb(109, 187, 20);
+  
 }
 .reportTable td{
   border: 1px solid rgb(109, 187, 20);
+  padding-left: 3px;
+  padding-right: 3px;
+  white-space: nowrap;
+}
+.tableWrapper{
+  overflow-x: auto;
+}
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+}
+
+/* Track Piece */
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background:green; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: greenyellow; 
 }
 
 </style>

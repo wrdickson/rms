@@ -6,7 +6,6 @@
     <v-navigation-drawer
       v-model="drawer"
       mobile-break-point="600"
-      clipped
       app
       width="200"
     >

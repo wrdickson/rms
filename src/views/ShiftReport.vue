@@ -191,7 +191,7 @@ export default{
       paymentTypeTotals: {},
       paymentTotal: 0,
       paymentTypes: [],
-      generatedTime: moment().format("MMMM D, YYYY, h:mm:ss a"),
+      generatedTime: moment().format("MMMM D, YYYY h:mm:ss a"),
       sales: [],
       shift: {},
       user: this.$store.getters.getUser
@@ -203,13 +203,16 @@ export default{
       let docDefinition = {
         header: {
           text: 'Shift Report',
-          style: ['f15']
+          style: ['f12', 'center']
         },
-        footer: 'Footer here!',
+        footer: '',
         content: [],
         styles: {
           bold: {
             bold: true
+          },
+          f12: {
+            fontSize: 12
           },
           f15: {
             fontSize: 15
@@ -220,6 +223,9 @@ export default{
           center: {
             alignment: 'center'
           },
+          marginBelow: {
+            margin: [0, 0, 0, 15]
+          },
           table: {
             margin: [0, 5, 0, 15]
           }
@@ -228,6 +234,32 @@ export default{
           fontSize: 8
         }
       }
+      //  add shift info
+      //  user
+      let userInfo = {
+        text: 'User: ' + this.user.username,
+        style: ['f12']
+      }
+      docDefinition.content.push(userInfo)
+      //  shiftId
+      let shiftId = {
+        text: 'Shift Id: ' + this.shift.id,
+        style: ['f12']
+      }
+      docDefinition.content.push(shiftId)
+      // shift opened
+      let shiftOpened = {
+        text: 'Opened: ' + moment(this.shift.start_date).format('MMM D, YYYY h:mm:ss a'),
+        style: ['f12']
+      }
+      docDefinition.content.push(shiftOpened)
+      // generated time
+      let generatedTime = {
+        text: 'Report Generated: ' + moment().format('MMM D, YYYY h:mm:ss a'),
+        style: ['f12', 'marginBelow']
+      }
+      docDefinition.content.push(generatedTime)
+
       //iterate through the payment types
       let self = this
       _.each( this.paymentTypes, function( paymentType ){
@@ -239,38 +271,77 @@ export default{
         }
         //append it to the document
         docDefinition.content.push(obj)
-
         //create the table
         obj = {
+          layout: 'lightHorizontalLines',
           style: ['table'],
           table: {
             // headers are automatically repeated if the table spans over multiple pages
             // you can declare how many rows should be treated as headers
             headerRows: 1,
-            widths: [ 150, 125, 100, 70 ],
+            widths: [ 120, 50, 40, 50, 120 ],
             body: [
-              [ 'Date', 'Type', 'Amount', 'Folio' ],
+              [ 'Date', 'Amount', 'Folio', 'Reservation', 'Customer' ],
             ]
           }
         }
         //  iterate throuth the payments by type, adding 'rows'
-        let total = 0
+        //let total = 0
+        //let self = this;
         _.forEach( self.paymentsByPaymentType[paymentType.id], function( payment ){
           let arr = []
-          arr.push(payment.date_posted)
-          arr.push(payment.payment_title)
+          arr.push( moment(payment.date_posted).format("MMMM D, YYYY h:mm:ss a"))
           arr.push(payment.amount)
           arr.push(payment.folio)
-          total = total + parseFloat(payment.amount)
+          arr.push(payment.reservation)
+          arr.push(payment.last_name + ", " + payment.first_name)
+          //total = total + parseFloat(payment.amount)
           //push these 'rows' onto the table object
           obj.table.body.push(arr)
         })
         //make a row for totals
-        let totalArray = ['Total', '===>', total, '']
+        let totalArray = ['Total ==>', self.paymentTypeTotals[ paymentType.id ], '', '', '']
         obj.table.body.push(totalArray)
         //  now push the table obj onto document content
         docDefinition.content.push(obj)
       });
+      //  add a totals table
+      let totalsTitle = {
+        text: "Totals",
+        style: ['f15']
+      }
+      docDefinition.content.push(totalsTitle)
+
+      let totalsObj = {
+          layout: 'lightHorizontalLines',
+          style: ['table'],
+          table: {
+            // headers are automatically repeated if the table spans over multiple pages
+            // you can declare how many rows should be treated as headers
+            headerRows: 1,
+            widths: [ 100, 100 ],
+            body: [
+              [ 'Payment Type', 'Amount' ],
+            ]
+          }
+      }
+
+      //  iterate through payment types
+      _.each( self.paymentTypes, function( paymentType ){
+        let pArr = []
+        pArr.push(  paymentType.payment_title )
+        pArr.push(  self.paymentTypeTotals[ paymentType.id ] )
+        //  push it onto the totalsObj (table)
+        totalsObj.table.body.push(pArr)
+      });
+      // add the totals row
+      let totalsTotal = []
+      totalsTotal.push("Total ===>");
+      totalsTotal.push( self.paymentTotal );
+      //  push it onto the "table"
+      totalsObj.table.body.push(totalsTotal);
+      // and, push the table onto the document
+      docDefinition.content.push(totalsObj)
       //open the .pdf in a new window
       pdfMake.createPdf(docDefinition).open()
     }
@@ -302,7 +373,6 @@ export default{
 .tableWrapper{
   overflow-x: auto;
 }
-
 
 /* width */
 ::-webkit-scrollbar {

@@ -93,9 +93,7 @@
               <v-list-item-title>CalendarView</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-        </div>
-
-        
+        </div>        
 
         <!-- from here down, only visible to logged userw permission > 7 --> 
         <div v-if="user.permission > 7">
@@ -107,8 +105,6 @@
               <v-list-item-title >Admin Panel</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-
-
          </div>        
 
       </v-list>

@@ -1,109 +1,65 @@
 <template>
   <v-container>
     <v-slide-x-transition>
+      <FolioView 
+        v-if="showFolio"
+        @folio-view-dismiss="folioViewDismiss"
+        v-bind:folioId="selectedFolioId"
+      ></FolioView>
     </v-slide-x-transition>
-    <div v-if="loaded">
-      <v-row>
-        <v-col cols="12" xs="12">
-          <v-btn color="info" @click="generatePdf">Pdf</v-btn>
-        </v-col>
-      </v-row>
-      <v-layout>
-        <v-flex xs12>
-            <h2 class="text-xs-center">Shift Report</h2>
-        </v-flex>
-      </v-layout>
-      <v-layout row wrap>
-        <v-flex xs12>
-          <p>User: {{ this.user.username }}</p>
-        </v-flex>
-        <v-flex xs12>
-          <p>Report Generated: {{ generatedTime }}</p>
-        </v-flex>
-        <v-flex xs12>
-          <p>Shift Id: {{ shift.id }}</p>
-        </v-flex>
-      </v-layout>
-      <v-layout row wrap>
-        <v-flex xs12>
-          <h2>All Payments</h2>
-        </v-flex>
-        <v-flex xs12>
-          <table class="reportTable">
-            <tr>
-              <th>Date</th>
-              <th>Type</th>
-              <th>Amount</th>
-              <th>By</th>
-              <th>Folio</th>
-              <th>Reservation</th>
-            </tr>
-            <tr
-              v-for="payment in payments"
-              v-bind:key="payment.id"
-            >
-              <td>{{payment.date_posted}}</td>
-              <td>{{payment.payment_title}}</td>
-              <td>{{payment.amount}}</td>
-              <td>{{payment.posted_by_username}}</td>
-              <td style="margin: 0px !important; padding: 0px !important;">
-                <v-btn 
-                  color="green darken-4"
-                  tile 
-                  width="100%"
-                >
-                  {{payment.folio}}
-                </v-btn>
-              </td>
-              <td style="margin: 0px !important; padding: 0px !important;">
-                <v-btn 
-                  color="blue darken-4"
-                  tile 
-                  width="100%"
-                >
-                  {{payment.reservation}}
-                </v-btn>              
-              </td>
-            </tr>
-            <tr>
-              <td>TOTAL PAYMENTS ==></td>
-              <td></td>
-              <td>{{ paymentTotal }}</td>
-              <td></td>           
-            </tr>        
-          </table>
-        </v-flex>
-      </v-layout>
-      <v-layout row  wrap v-for="paymentType in paymentTypes" v-bind:key="paymentType.id">
-        <v-flex xs12 >
-          <h2>Payment Type: {{paymentType.payment_title}}</h2>
-        </v-flex>
-        <v-flex xs12>
-          <div class="tableWrapper">
+    <v-slide-y-transition>
+      <div v-if="loaded && showMain">
+        <v-row>
+          <v-col cols="12" xs="12">
+            <v-btn color="info" @click="generatePdf">Pdf</v-btn>
+          </v-col>
+        </v-row>
+        <v-layout>
+          <v-flex xs12>
+              <h2 class="text-xs-center">Shift Report</h2>
+          </v-flex>
+        </v-layout>
+        <v-layout row wrap>
+          <v-flex xs12>
+            <p>User: {{ this.user.username }}</p>
+          </v-flex>
+          <v-flex xs12>
+            <p>Report Generated: {{ generatedTime }}</p>
+          </v-flex>
+          <v-flex xs12>
+            <p>Shift Id: {{ shift.id }}</p>
+          </v-flex>
+        </v-layout>
+        <v-layout row wrap>
+          <v-flex xs12>
+            <h2>All Payments</h2>
+          </v-flex>
+          <v-flex xs12>
             <table class="reportTable">
               <tr>
                 <th>Date</th>
                 <th>Type</th>
                 <th>Amount</th>
+                <th>By</th>
                 <th>Folio</th>
                 <th>Reservation</th>
-                <th>Customer</th>
               </tr>
-              <!-- rows fore each payment -->
               <tr
-                v-for="payment in paymentsByPaymentType[ paymentType.id ]"
+                v-for="payment in payments"
                 v-bind:key="payment.id"
               >
                 <td>{{payment.date_posted}}</td>
                 <td>{{payment.payment_title}}</td>
                 <td>{{payment.amount}}</td>
+                <td>{{payment.posted_by_username}}</td>
                 <td style="margin: 0px !important; padding: 0px !important;">
                   <v-btn 
                     color="green darken-4"
                     tile 
                     width="100%"
+                    @click="showFolioView(payment.folio)"
                   >
-                    {{payment.folio}}<v-icon right>mdi-open-in-new</v-icon>
+                    {{payment.folio}}
                   </v-btn>
                 </td>
                 <td style="margin: 0px !important; padding: 0px !important;">
@@ -112,34 +68,87 @@
                     tile 
                     width="100%"
                   >
-                    {{payment.reservation}}<v-icon right>mdi-open-in-new</v-icon>
+                    {{payment.reservation}}
                   </v-btn>              
                 </td>
-                <td style="margin: 0px !important; padding: 0px !important;">
-                  <v-btn 
-                    color="orange darken-4"
-                    tile 
-                    width="100%"
-                  >
-                    {{payment.last_name}}, {{payment.first_name}}<v-icon right>mdi-open-in-new</v-icon>
-                  </v-btn>              
-                </td>         
               </tr>
-              <!-- totals row -->
               <tr>
-                <td colspan='2'>Total ====></td>
-                <td>{{ paymentTypeTotals[ paymentType.id ] }}</td>
-                <td>pti: {{ paymentType.id }}</td>
-              </tr>
-            </table>       
-          </div>
-        </v-flex>
-      </v-layout>
-    </div>
+                <td>TOTAL PAYMENTS ==></td>
+                <td></td>
+                <td>{{ paymentTotal }}</td>
+                <td></td>           
+              </tr>        
+            </table>
+          </v-flex>
+        </v-layout>
+        <v-layout row  wrap v-for="paymentType in paymentTypes" v-bind:key="paymentType.id">
+          <v-flex xs12 >
+            <h2>Payment Type: {{paymentType.payment_title}}</h2>
+          </v-flex>
+          <v-flex xs12>
+            <div class="tableWrapper">
+              <table class="reportTable">
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>Folio</th>
+                  <th>Reservation</th>
+                  <th>Customer</th>
+                </tr>
+                <!-- rows fore each payment -->
+                <tr
+                  v-for="payment in paymentsByPaymentType[ paymentType.id ]"
+                  v-bind:key="payment.id"
+                >
+                  <td>{{payment.date_posted}}</td>
+                  <td>{{payment.payment_title}}</td>
+                  <td>{{payment.amount}}</td>
+                  <td style="margin: 0px !important; padding: 0px !important;">
+                    <v-btn 
+                      color="green darken-4"
+                      tile 
+                      width="100%"
+                    >
+                      {{payment.folio}}<v-icon right>mdi-open-in-new</v-icon>
+                    </v-btn>
+                  </td>
+                  <td style="margin: 0px !important; padding: 0px !important;">
+                    <v-btn 
+                      color="blue darken-4"
+                      tile 
+                      width="100%"
+                    >
+                      {{payment.reservation}}<v-icon right>mdi-open-in-new</v-icon>
+                    </v-btn>              
+                  </td>
+                  <td style="margin: 0px !important; padding: 0px !important;">
+                    <v-btn 
+                      color="orange darken-4"
+                      tile 
+                      width="100%"
+                    >
+                      {{payment.last_name}}, {{payment.first_name}}<v-icon right>mdi-open-in-new</v-icon>
+                    </v-btn>              
+                  </td>         
+                </tr>
+                <!-- totals row -->
+                <tr>
+                  <td colspan='2'>Total ====></td>
+                  <td>{{ paymentTypeTotals[ paymentType.id ] }}</td>
+                  <td>pti: {{ paymentType.id }}</td>
+                </tr>
+              </table>       
+            </div>
+          </v-flex>
+        </v-layout>
+      </div>
+    </v-slide-y-transition>
   </v-container>
 </template>
 
 <script>
+import FolioView from './../views/FolioView.vue'
 import moment from 'moment'
 import api from './../api/api.js'
 import _ from 'lodash'
@@ -149,6 +158,9 @@ import pdfFonts from 'pdfmake/build/vfs_fonts'
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 
 export default{
+  components: {
+    FolioView
+  },
   computed: {
     paymentsByPaymentType: {
       get: function(){
@@ -193,11 +205,18 @@ export default{
       paymentTypes: [],
       generatedTime: moment().format("MMMM D, YYYY h:mm:ss a"),
       sales: [],
+      selectedFolioId: 0,
       shift: {},
+      showFolio: false,
+      showMain: true,
       user: this.$store.getters.getUser
     }
   },
   methods: {
+    folioViewDismiss(){
+      this.showFolio = false
+      this.showMain = true
+    },
     generatePdf(){
       //generate the basic document definition
       let docDefinition = {
@@ -267,7 +286,7 @@ export default{
         //create a text object for the payment header
         let obj = {
           text: paymentType.payment_title,
-          style: 'f15'
+          style: 'f12'
         }
         //append it to the document
         docDefinition.content.push(obj)
@@ -344,6 +363,11 @@ export default{
       docDefinition.content.push(totalsObj)
       //open the .pdf in a new window
       pdfMake.createPdf(docDefinition).open()
+    },
+    showFolioView(folioId){
+      this.showMain = false;
+      this.showFolio = true;
+      this.selectedFolioId = folioId;
     }
   },
   name:"ShiftReport",

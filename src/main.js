@@ -8,6 +8,8 @@ import store from './store'
 
 Vue.config.productionTip = false
 
+
+
 new Vue({
     created(){
       //see if we have a user in Session Storage

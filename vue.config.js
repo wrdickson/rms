@@ -2,9 +2,6 @@ module.exports = {
 
   // proxy the api calls for production
   // comment this out for build
-
-
-
   devServer: {
     proxy: {
       '/': {

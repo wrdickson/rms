@@ -426,7 +426,7 @@
                     document.getElementById(selector).classList.add('resMiddleTd')
                 }
               }
-              iterateCount += 1;              
+              iterateCount += 1;
             });
           });
         });
@@ -469,7 +469,7 @@
           });
 
         }
-      },        
+      },
       scrollRight: function(){
         console.log("scrollRight");
       },
